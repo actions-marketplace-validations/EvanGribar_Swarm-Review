@@ -1,7 +1,10 @@
 {
   "name": "swarm-review",
-  "version": "0.2.0",
+  "version": "1.3.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "description": "GitHub Action that runs a multi-agent pull request review swarm with structured debate and principal synthesis.",
   "license": "MIT",
   "type": "module",
@@ -24,17 +27,22 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "bundle": "npm run typecheck && ncc build src/index.ts -o dist --minify",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test dist/tests/index.js"
+    "test": "npm run build && node --test dist/tests/index.js",
+    "validation:specbridge": "npm run build && node -e \"process.env.SWARM_OFFLINE_VALIDATION='1'; import('./dist/tests/specbridge-offline-validation.js')\""
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
-    "js-yaml": "^4.1.0",
+    "@specbridge/core": "https://github.com/EvanGribar/SpecBridge/releases/download/specbridge-consolidated-v0.4.0/specbridge-core-0.4.0.tgz",
+    "@specbridge/sarif": "https://github.com/EvanGribar/SpecBridge/releases/download/specbridge-consolidated-v0.4.0/specbridge-sarif-0.4.0.tgz",
+    "js-yaml": "^4.2.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
     "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.13.10",
+    "@vercel/ncc": "^0.38.4",
     "typescript": "^5.8.2"
   }
 }

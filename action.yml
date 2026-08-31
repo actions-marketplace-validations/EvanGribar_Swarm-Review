@@ -1,27 +1,38 @@
 name: swarm-review
 description: Run a swarm of AI reviewers on pull requests with multi-provider support (Anthropic, OpenAI, OpenRouter, custom).
-author: GitHub Copilot
+author: EvanGribar
 inputs:
   github-token:
     description: GitHub token with permission to comment on pull requests.
     required: true
   anthropic-api-key:
-    description: Legacy: API key for Anthropic. For multi-provider support, configure provider in .swarm.yml instead.
+    description: "Legacy: API key for Anthropic. For multi-provider support, configure provider in .swarm.yml instead."
     required: false
   anthropic-model:
-    description: Legacy: Model name for Anthropic. For multi-provider support, configure provider in .swarm.yml instead.
+    description: "Legacy: Model name for Anthropic. For multi-provider support, configure provider in .swarm.yml instead."
     required: false
     default: claude-3-5-sonnet-latest
   api-endpoint:
-    description: Custom API endpoint for Anthropic-compatible providers (e.g., OpenRouter, local LLM).
+    description: Optional API base URL or full messages endpoint for an Anthropic-compatible service.
     required: false
   config-path:
     description: Path to the swarm configuration file. Use this to configure providers, agents, and debate settings.
     required: false
     default: .swarm.yml
+  pull-number:
+    description: Optional pull request number when the event payload does not identify one.
+    required: false
   check-run-id:
     description: Optional existing check run ID to update after the review.
     required: false
+  inline:
+    description: Whether to post inline comments on findings (true/false).
+    required: false
+    default: 'false'
+  review-event:
+    description: GitHub Review Event to submit (COMMENT, APPROVE, REQUEST_CHANGES, AUTO).
+    required: false
+    default: 'COMMENT'
 outputs:
   pull-number:
     description: Pull request number processed by this run.
@@ -35,6 +46,24 @@ outputs:
     description: URL of the created or updated PR comment when available.
   check-run-updated:
     description: True when a valid check-run-id was provided and used.
+  total-input-tokens:
+    description: Total input tokens consumed by LLM calls.
+  total-output-tokens:
+    description: Total output tokens consumed by LLM calls.
+  total-cost:
+    description: Estimated total cost of LLM calls in USD.
+  total-calls:
+    description: Total number of LLM calls executed.
+  coverage-path:
+    description: Path to the generated SpecBridge coverage report when requirement-aware review is enabled.
+  sarif-path:
+    description: Path to the generated SpecBridge SARIF report when requirement-aware review is enabled.
+  requirement-count:
+    description: Number of requirement criteria evaluated.
+  violated-count:
+    description: Number of evidenced violated criteria.
+  not-verifiable-count:
+    description: Number of criteria that could not be verified.
 runs:
   using: node20
   main: dist/index.js

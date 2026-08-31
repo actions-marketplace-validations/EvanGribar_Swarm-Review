@@ -1,6 +1,6 @@
 import { Octokit } from "@octokit/rest";
 
-import { FileDiffSchema, type DiffConfig, type FileDiff } from "./types.js";
+import { FileDiffSchema, type DiffConfig, type FileDiff, type AgentConfig } from "./types.js";
 
 type DiffFormatOptions = DiffConfig;
 
@@ -9,6 +9,7 @@ const DEFAULT_DIFF_FORMAT_OPTIONS: Required<DiffFormatOptions> = {
   max_patch_chars_per_file: 12_000,
   max_total_chars: 180_000,
   exclude_patterns: [],
+  include_patterns: [],
 };
 
 export function createOctokit(token: string): Octokit {
@@ -43,13 +44,64 @@ export async function fetchPullRequestDiff(
   );
 }
 
-function getExcludeRegexes(patterns: string[]): RegExp[] {
+export function globToRegex(pattern: string): RegExp {
+  const hasGlobChars = /[*?]/.test(pattern);
+  if (!hasGlobChars) {
+    try {
+      return new RegExp(pattern);
+    } catch {
+      // Proceed to glob conversion if it fails to compile directly
+    }
+  }
+
+  let regexStr = "";
+  let i = 0;
+  while (i < pattern.length) {
+    const char = pattern[i];
+    if (char === "*") {
+      if (pattern[i + 1] === "*") {
+        if (pattern[i + 2] === "/") {
+          regexStr += "(?:.*/)?";
+          i += 3;
+        } else {
+          regexStr += ".*";
+          i += 2;
+        }
+      } else {
+        regexStr += "[^/]*";
+        i += 1;
+      }
+    } else if (char === "?") {
+      regexStr += "[^/]";
+      i += 1;
+    } else if ("[\\^$.|?*+()".includes(char)) {
+      regexStr += "\\" + char;
+      i += 1;
+    } else {
+      regexStr += char;
+      i += 1;
+    }
+  }
+
+  const cleanPattern = pattern.endsWith("/") ? pattern.slice(0, -1) : pattern;
+  const hasSlash = cleanPattern.includes("/");
+
+  if (!hasSlash) {
+    return new RegExp(`(?:^|\\/)${regexStr}$`);
+  } else {
+    const prefix = regexStr.startsWith("^") ? "" : "^";
+    const suffix = regexStr.endsWith("$") ? "" : "$";
+    return new RegExp(`${prefix}${regexStr}${suffix}`);
+  }
+}
+
+export function compilePatterns(patterns: string[]): RegExp[] {
   return patterns
     .map((p) => {
       try {
-        return new RegExp(p);
+        return globToRegex(p);
       } catch (e) {
-        console.error(`Invalid regex pattern "${p}":`, e);
+        console.error(`Invalid pattern "${p}":`, e);
         return null;
       }
     })
@@ -65,26 +117,34 @@ export function formatFileDiffs(files: FileDiff[], options?: Partial<DiffFormatO
   const SEPARATOR = "\n\n---\n\n";
 
   // Pre-compile regex patterns for better performance
-  const excludeRegexes = getExcludeRegexes(settings.exclude_patterns);
+  const excludeRegexes = compilePatterns(settings.exclude_patterns);
+  const includeRegexes = compilePatterns(settings.include_patterns);
 
   // Filter out excluded files
-  const filteredFiles = files.filter(
-    (file) => !excludeRegexes.some((r) => r.test(file.path))
-  );
+  const filteredFiles = files.filter((file) => {
+    if (includeRegexes.length > 0) {
+      const matchesInclude = includeRegexes.some((r) => r.test(file.path));
+      if (!matchesInclude) return false;
+    }
+    return !excludeRegexes.some((r) => r.test(file.path));
+  });
+  const omittedByPatterns = files.length - filteredFiles.length;
 
-  // Pre-calculate metadata to establish the initial budget overhead.
-  // We use placeholder counts that won't significantly change the length.
+  // Reserve the longest possible count values so the final metadata cannot
+  // exceed the budget calculation as files are omitted.
+  const countPlaceholder = String(files.length);
   const metadataPlaceholder = [
     "### Diff Budget",
     `- total_files: ${files.length}`,
-    `- included_files: 888`,
-    `- omitted_files: 888`,
+    `- included_files: ${countPlaceholder}`,
+    `- omitted_files: ${countPlaceholder}`,
+    `- excluded_by_patterns: ${omittedByPatterns}`,
     `- max_files: ${settings.max_files}`,
     `- max_patch_chars_per_file: ${settings.max_patch_chars_per_file}`,
     `- max_total_chars: ${settings.max_total_chars}`,
   ].join("\n");
 
-  let remainingChars = settings.max_total_chars - metadataPlaceholder.length - SEPARATOR.length;
+  let remainingChars = settings.max_total_chars - metadataPlaceholder.length;
   const selectedFiles = filteredFiles.slice(0, settings.max_files);
   const renderedFiles: string[] = [];
 
@@ -115,10 +175,7 @@ export function formatFileDiffs(files: FileDiff[], options?: Partial<DiffFormatO
     remainingChars -= rendered.length + SEPARATOR.length;
   }
 
-  const omittedByFileLimit = Math.max(0, filteredFiles.length - selectedFiles.length);
-  const omittedByCharBudget = Math.max(0, selectedFiles.length - renderedFiles.length);
-  const omittedByPatterns = files.length - filteredFiles.length;
-  const omittedCount = omittedByFileLimit + omittedByCharBudget + omittedByPatterns;
+  const omittedCount = files.length - renderedFiles.length;
 
   const metadata = [
     "### Diff Budget",
@@ -132,4 +189,53 @@ export function formatFileDiffs(files: FileDiff[], options?: Partial<DiffFormatO
   ].join("\n");
 
   return [metadata, ...renderedFiles].join(SEPARATOR);
+}
+
+export function filterDiffForAgent(diff: FileDiff[], agent: AgentConfig): FileDiff[] {
+  if (!agent.include_patterns && !agent.exclude_patterns) {
+    return diff;
+  }
+
+  const includeRegexes = compilePatterns(agent.include_patterns || []);
+  const excludeRegexes = compilePatterns(agent.exclude_patterns || []);
+
+  return diff.filter((file) => {
+    if (includeRegexes.length > 0) {
+      const matchesInclude = includeRegexes.some((r) => r.test(file.path));
+      if (!matchesInclude) return false;
+    }
+    if (excludeRegexes.length > 0) {
+      const matchesExclude = excludeRegexes.some((r) => r.test(file.path));
+      if (matchesExclude) return false;
+    }
+    return true;
+  });
+}
+
+export function getDiffLineNumbers(patch: string): Set<number> {
+  const lineNumbers = new Set<number>();
+  if (!patch) return lineNumbers;
+
+  const lines = patch.split("\n");
+  let currentNewLine = 0;
+
+  for (const line of lines) {
+    if (line.startsWith("@@")) {
+      const match = line.match(/^@@\s+-\d+(?:,\d+)?\s+\+(\d+)(?:,\d+)?\s+@@/);
+      if (match) {
+        currentNewLine = parseInt(match[1], 10);
+      }
+    } else if (line.startsWith("+")) {
+      lineNumbers.add(currentNewLine);
+      currentNewLine++;
+    } else if (line.startsWith("-")) {
+      // Deletion - doesn't increment new line number
+    } else {
+      // Context line
+      lineNumbers.add(currentNewLine);
+      currentNewLine++;
+    }
+  }
+
+  return lineNumbers;
 }

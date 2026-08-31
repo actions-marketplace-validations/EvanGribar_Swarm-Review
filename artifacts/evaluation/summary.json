@@ -1,0 +1,2638 @@
+{
+  "schemaVersion": "1",
+  "generatedAt": "2026-07-26T18:05:06.773Z",
+  "status": "preliminary",
+  "automatic": [
+    {
+      "configurationId": "v03-single-agent",
+      "repetitions": 6,
+      "automatic": {
+        "truePositives": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 1.6666666666666667,
+          "median": 1.5,
+          "min": 1,
+          "max": 3,
+          "standardDeviation": 0.7453559924999299
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 0.8605283605283605,
+          "median": 0.8712121212121212,
+          "min": 0.7692307692307693,
+          "max": 0.9090909090909091,
+          "standardDeviation": 0.053055556657916295
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 0.9241483154526633,
+          "median": 0.9307359307359306,
+          "min": 0.8695652173913044,
+          "max": 0.9523809523809523,
+          "standardDeviation": 0.031155553090997226
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 1.1666666666666667,
+          "median": 1.15,
+          "min": 1.1,
+          "max": 1.3,
+          "standardDeviation": 0.07453559924999295
+        },
+        "runtimeMs": {
+          "mean": 23031.666666666668,
+          "median": 23145,
+          "min": 20148,
+          "max": 27051,
+          "standardDeviation": 2170.504216894212
+        },
+        "estimatedCostUsd": {
+          "mean": 0.0014495999999999999,
+          "median": 0.0014472,
+          "min": 0.0013815,
+          "max": 0.0015573000000000002,
+          "standardDeviation": 0.0000600507285551142
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.00014496,
+          "median": 0.00014471999999999998,
+          "min": 0.00013815,
+          "max": 0.00015573000000000003,
+          "standardDeviation": 0.000006005072855511422
+        },
+        "costPerTruePositive": {
+          "mean": 0.00014496,
+          "median": 0.00014471999999999998,
+          "min": 0.00013815,
+          "max": 0.00015573000000000003,
+          "standardDeviation": 0.000006005072855511422
+        },
+        "runtimePerCase": {
+          "mean": 2303.1666666666665,
+          "median": 2314.5,
+          "min": 2014.8,
+          "max": 2705.1,
+          "standardDeviation": 217.05042168942114
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2321,
+          "estimatedCostUsd": 0.0001305
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1930,
+          "estimatedCostUsd": 0.00013230000000000002
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1875,
+          "estimatedCostUsd": 0.00012135
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2055,
+          "estimatedCostUsd": 0.00015165
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 2403,
+          "estimatedCostUsd": 0.00019109999999999998
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1910,
+          "estimatedCostUsd": 0.00012119999999999999
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 3704,
+          "estimatedCostUsd": 0.00022275
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2487,
+          "estimatedCostUsd": 0.00013665000000000001
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2048,
+          "estimatedCostUsd": 0.0001506
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2186,
+          "estimatedCostUsd": 0.000123
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 3226,
+          "estimatedCostUsd": 0.0001371
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2404,
+          "estimatedCostUsd": 0.00014309999999999998
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 4924,
+          "estimatedCostUsd": 0.00012255
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 3698,
+          "estimatedCostUsd": 0.00023985
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1882,
+          "estimatedCostUsd": 0.0001275
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2592,
+          "estimatedCostUsd": 0.0001392
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2080,
+          "estimatedCostUsd": 0.00014655
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2193,
+          "estimatedCostUsd": 0.00012885
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1941,
+          "estimatedCostUsd": 0.0001416
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2111,
+          "estimatedCostUsd": 0.0001212
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1972,
+          "estimatedCostUsd": 0.0001353
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1742,
+          "estimatedCostUsd": 0.0001185
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1807,
+          "estimatedCostUsd": 0.00011714999999999999
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2037,
+          "estimatedCostUsd": 0.00013544999999999999
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 2355,
+          "estimatedCostUsd": 0.0001827
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2015,
+          "estimatedCostUsd": 0.0001338
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2221,
+          "estimatedCostUsd": 0.00015915
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1965,
+          "estimatedCostUsd": 0.00013245
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2112,
+          "estimatedCostUsd": 0.00015419999999999998
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1922,
+          "estimatedCostUsd": 0.00011279999999999999
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1875,
+          "estimatedCostUsd": 0.0001353
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1814,
+          "estimatedCostUsd": 0.0001179
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2199,
+          "estimatedCostUsd": 0.00012795
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 3610,
+          "estimatedCostUsd": 0.00025485
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1843,
+          "estimatedCostUsd": 0.0001329
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2127,
+          "estimatedCostUsd": 0.00012539999999999999
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 2721,
+          "estimatedCostUsd": 0.00019454999999999999
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2009,
+          "estimatedCostUsd": 0.00013245
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 2963,
+          "estimatedCostUsd": 0.00020039999999999997
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2210,
+          "estimatedCostUsd": 0.0001356
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2087,
+          "estimatedCostUsd": 0.0001485
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1718,
+          "estimatedCostUsd": 0.0001299
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2702,
+          "estimatedCostUsd": 0.00011114999999999999
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2656,
+          "estimatedCostUsd": 0.00017865
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1585,
+          "estimatedCostUsd": 0.00011729999999999998
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1904,
+          "estimatedCostUsd": 0.000117
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2172,
+          "estimatedCostUsd": 0.00015315
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1991,
+          "estimatedCostUsd": 0.00011805000000000001
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 2455,
+          "estimatedCostUsd": 0.0001926
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1910,
+          "estimatedCostUsd": 0.000117
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1837,
+          "estimatedCostUsd": 0.0001371
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 4339,
+          "estimatedCostUsd": 0.0001359
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2003,
+          "estimatedCostUsd": 0.00011775
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1932,
+          "estimatedCostUsd": 0.00014204999999999998
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 2827,
+          "estimatedCostUsd": 0.0002217
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1764,
+          "estimatedCostUsd": 0.00011219999999999999
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 2962,
+          "estimatedCostUsd": 0.00020475
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2121,
+          "estimatedCostUsd": 0.00012644999999999998
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2001,
+          "estimatedCostUsd": 0.0001314
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1735,
+          "estimatedCostUsd": 0.0001176
+        }
+      ]
+    },
+    {
+      "configurationId": "v03-smoke-single-agent",
+      "repetitions": 1,
+      "automatic": {
+        "truePositives": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "runtimeMs": {
+          "mean": 1610,
+          "median": 1610,
+          "min": 1610,
+          "max": 1610,
+          "standardDeviation": 0
+        },
+        "estimatedCostUsd": {
+          "mean": 0.0001395,
+          "median": 0.0001395,
+          "min": 0.0001395,
+          "max": 0.0001395,
+          "standardDeviation": 0
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.0001395,
+          "median": 0.0001395,
+          "min": 0.0001395,
+          "max": 0.0001395,
+          "standardDeviation": 0
+        },
+        "costPerTruePositive": {
+          "mean": 0.0001395,
+          "median": 0.0001395,
+          "min": 0.0001395,
+          "max": 0.0001395,
+          "standardDeviation": 0
+        },
+        "runtimePerCase": {
+          "mean": 1610,
+          "median": 1610,
+          "min": 1610,
+          "max": 1610,
+          "standardDeviation": 0
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 1610,
+          "estimatedCostUsd": 0.0001395
+        }
+      ]
+    },
+    {
+      "configurationId": "v03-smoke-swarm-no-debate",
+      "repetitions": 1,
+      "automatic": {
+        "truePositives": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 2,
+          "median": 2,
+          "min": 2,
+          "max": 2,
+          "standardDeviation": 0
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 0.3333333333333333,
+          "median": 0.3333333333333333,
+          "min": 0.3333333333333333,
+          "max": 0.3333333333333333,
+          "standardDeviation": 0
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 0.5,
+          "median": 0.5,
+          "min": 0.5,
+          "max": 0.5,
+          "standardDeviation": 0
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 3,
+          "median": 3,
+          "min": 3,
+          "max": 3,
+          "standardDeviation": 0
+        },
+        "runtimeMs": {
+          "mean": 6762,
+          "median": 6762,
+          "min": 6762,
+          "max": 6762,
+          "standardDeviation": 0
+        },
+        "estimatedCostUsd": {
+          "mean": 0.0007187999999999999,
+          "median": 0.0007187999999999999,
+          "min": 0.0007187999999999999,
+          "max": 0.0007187999999999999,
+          "standardDeviation": 0
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.0007187999999999999,
+          "median": 0.0007187999999999999,
+          "min": 0.0007187999999999999,
+          "max": 0.0007187999999999999,
+          "standardDeviation": 0
+        },
+        "costPerTruePositive": {
+          "mean": 0.0007187999999999999,
+          "median": 0.0007187999999999999,
+          "min": 0.0007187999999999999,
+          "max": 0.0007187999999999999,
+          "standardDeviation": 0
+        },
+        "runtimePerCase": {
+          "mean": 6762,
+          "median": 6762,
+          "min": 6762,
+          "max": 6762,
+          "standardDeviation": 0
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 2,
+          "falseNegatives": 0,
+          "runtimeMs": 6762,
+          "estimatedCostUsd": 0.0007187999999999999
+        }
+      ]
+    },
+    {
+      "configurationId": "v03-smoke-swarm-with-debate",
+      "repetitions": 1,
+      "automatic": {
+        "truePositives": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "runtimeMs": {
+          "mean": 7241,
+          "median": 7241,
+          "min": 7241,
+          "max": 7241,
+          "standardDeviation": 0
+        },
+        "estimatedCostUsd": {
+          "mean": 0.00071775,
+          "median": 0.00071775,
+          "min": 0.00071775,
+          "max": 0.00071775,
+          "standardDeviation": 0
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.00071775,
+          "median": 0.00071775,
+          "min": 0.00071775,
+          "max": 0.00071775,
+          "standardDeviation": 0
+        },
+        "costPerTruePositive": {
+          "mean": 0.00071775,
+          "median": 0.00071775,
+          "min": 0.00071775,
+          "max": 0.00071775,
+          "standardDeviation": 0
+        },
+        "runtimePerCase": {
+          "mean": 7241,
+          "median": 7241,
+          "min": 7241,
+          "max": 7241,
+          "standardDeviation": 0
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7241,
+          "estimatedCostUsd": 0.00071775
+        }
+      ]
+    },
+    {
+      "configurationId": "v03-specbridge-requirements",
+      "repetitions": 3,
+      "automatic": {
+        "truePositives": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 0.3333333333333333,
+          "median": 0,
+          "min": 0,
+          "max": 1,
+          "standardDeviation": 0.4714045207910317
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 0.9696969696969697,
+          "median": 1,
+          "min": 0.9090909090909091,
+          "max": 1,
+          "standardDeviation": 0.04285495643554835
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 0.9841269841269842,
+          "median": 1,
+          "min": 0.9523809523809523,
+          "max": 1,
+          "standardDeviation": 0.022447834323382487
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 1.0333333333333334,
+          "median": 1,
+          "min": 1,
+          "max": 1.1,
+          "standardDeviation": 0.047140452079103216
+        },
+        "runtimeMs": {
+          "mean": 31876.333333333332,
+          "median": 29769,
+          "min": 29693,
+          "max": 36167,
+          "standardDeviation": 3034.1181402326592
+        },
+        "estimatedCostUsd": {
+          "mean": 0.0016656,
+          "median": 0.0016626,
+          "min": 0.0016362,
+          "max": 0.0016979999999999999,
+          "standardDeviation": 0.000025318767742526438
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.00016655999999999998,
+          "median": 0.00016626,
+          "min": 0.00016362,
+          "max": 0.00016979999999999998,
+          "standardDeviation": 0.0000025318767742526374
+        },
+        "costPerTruePositive": {
+          "mean": 0.00016655999999999998,
+          "median": 0.00016626,
+          "min": 0.00016362,
+          "max": 0.00016979999999999998,
+          "standardDeviation": 0.0000025318767742526374
+        },
+        "runtimePerCase": {
+          "mean": 3187.6333333333337,
+          "median": 2976.9,
+          "min": 2969.3,
+          "max": 3616.7,
+          "standardDeviation": 303.4118140232657
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 1,
+          "falseNegatives": 0,
+          "runtimeMs": 3078,
+          "estimatedCostUsd": 0.00017669999999999999
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2614,
+          "estimatedCostUsd": 0.00014939999999999997
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2635,
+          "estimatedCostUsd": 0.0001515
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 3346,
+          "estimatedCostUsd": 0.00019664999999999998
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2555,
+          "estimatedCostUsd": 0.0001551
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 3770,
+          "estimatedCostUsd": 0.00017475
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 3133,
+          "estimatedCostUsd": 0.00015975
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 3204,
+          "estimatedCostUsd": 0.000162
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2486,
+          "estimatedCostUsd": 0.00015705000000000002
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2948,
+          "estimatedCostUsd": 0.0001533
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2814,
+          "estimatedCostUsd": 0.0001629
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2874,
+          "estimatedCostUsd": 0.00015419999999999998
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 3512,
+          "estimatedCostUsd": 0.0001773
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8786,
+          "estimatedCostUsd": 0.00016845
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2558,
+          "estimatedCostUsd": 0.00015689999999999996
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2342,
+          "estimatedCostUsd": 0.00014235
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 4081,
+          "estimatedCostUsd": 0.00021255
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 4122,
+          "estimatedCostUsd": 0.0001656
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2713,
+          "estimatedCostUsd": 0.00016064999999999997
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2365,
+          "estimatedCostUsd": 0.0001617
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2407,
+          "estimatedCostUsd": 0.0001575
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2619,
+          "estimatedCostUsd": 0.0001488
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2219,
+          "estimatedCostUsd": 0.00014969999999999998
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 4313,
+          "estimatedCostUsd": 0.00017444999999999998
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2214,
+          "estimatedCostUsd": 0.0001545
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2647,
+          "estimatedCostUsd": 0.00015075
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 5559,
+          "estimatedCostUsd": 0.00028514999999999997
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 3277,
+          "estimatedCostUsd": 0.00016380000000000002
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2415,
+          "estimatedCostUsd": 0.00015705000000000002
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 2023,
+          "estimatedCostUsd": 0.0001563
+        }
+      ]
+    },
+    {
+      "configurationId": "v03-swarm-debate-static",
+      "repetitions": 3,
+      "automatic": {
+        "truePositives": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "runtimeMs": {
+          "mean": 109993.66666666667,
+          "median": 103307,
+          "min": 102872,
+          "max": 123802,
+          "standardDeviation": 9765.580997678644
+        },
+        "estimatedCostUsd": {
+          "mean": 0.00774405,
+          "median": 0.0077953499999999995,
+          "min": 0.007602149999999999,
+          "max": 0.00783465,
+          "standardDeviation": 0.0001016130897079705
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.000774405,
+          "median": 0.0007795349999999999,
+          "min": 0.000760215,
+          "max": 0.000783465,
+          "standardDeviation": 0.000010161308970797031
+        },
+        "costPerTruePositive": {
+          "mean": 0.000774405,
+          "median": 0.0007795349999999999,
+          "min": 0.000760215,
+          "max": 0.000783465,
+          "standardDeviation": 0.000010161308970797031
+        },
+        "runtimePerCase": {
+          "mean": 10999.366666666669,
+          "median": 10330.7,
+          "min": 10287.2,
+          "max": 12380.2,
+          "standardDeviation": 976.5580997678644
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10187,
+          "estimatedCostUsd": 0.00076665
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9210,
+          "estimatedCostUsd": 0.0007212000000000001
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9879,
+          "estimatedCostUsd": 0.0007566
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10251,
+          "estimatedCostUsd": 0.0008038499999999999
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10249,
+          "estimatedCostUsd": 0.00071595
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10760,
+          "estimatedCostUsd": 0.0007367999999999999
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10710,
+          "estimatedCostUsd": 0.00079395
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10016,
+          "estimatedCostUsd": 0.00075105
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11596,
+          "estimatedCostUsd": 0.0008345999999999999
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10014,
+          "estimatedCostUsd": 0.0007215
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11814,
+          "estimatedCostUsd": 0.0007892999999999999
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10823,
+          "estimatedCostUsd": 0.00073545
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 12431,
+          "estimatedCostUsd": 0.000771
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10653,
+          "estimatedCostUsd": 0.0008479500000000001
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10501,
+          "estimatedCostUsd": 0.00071895
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10690,
+          "estimatedCostUsd": 0.0007332
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9995,
+          "estimatedCostUsd": 0.00081825
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 24209,
+          "estimatedCostUsd": 0.0007296
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 12091,
+          "estimatedCostUsd": 0.00087855
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10595,
+          "estimatedCostUsd": 0.0007730999999999999
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11053,
+          "estimatedCostUsd": 0.0008038499999999999
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10314,
+          "estimatedCostUsd": 0.0007494
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9611,
+          "estimatedCostUsd": 0.0007767000000000001
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10366,
+          "estimatedCostUsd": 0.000846
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11948,
+          "estimatedCostUsd": 0.0007425
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10344,
+          "estimatedCostUsd": 0.00078675
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10345,
+          "estimatedCostUsd": 0.00082425
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8624,
+          "estimatedCostUsd": 0.000732
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11243,
+          "estimatedCostUsd": 0.0008470499999999999
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9459,
+          "estimatedCostUsd": 0.00072615
+        }
+      ]
+    },
+    {
+      "configurationId": "v03-swarm-no-debate",
+      "repetitions": 3,
+      "automatic": {
+        "truePositives": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "runtimeMs": {
+          "mean": 84314.33333333333,
+          "median": 83077,
+          "min": 82206,
+          "max": 87660,
+          "standardDeviation": 2392.31747242896
+        },
+        "estimatedCostUsd": {
+          "mean": 0.0060792500000000005,
+          "median": 0.00610755,
+          "min": 0.006015,
+          "max": 0.0061152,
+          "standardDeviation": 0.0000455388295853109
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.000607925,
+          "median": 0.0006107549999999999,
+          "min": 0.0006015,
+          "max": 0.00061152,
+          "standardDeviation": 0.000004553882958531086
+        },
+        "costPerTruePositive": {
+          "mean": 0.000607925,
+          "median": 0.0006107549999999999,
+          "min": 0.0006015,
+          "max": 0.00061152,
+          "standardDeviation": 0.000004553882958531086
+        },
+        "runtimePerCase": {
+          "mean": 8431.433333333334,
+          "median": 8307.7,
+          "min": 8220.6,
+          "max": 8766,
+          "standardDeviation": 239.2317472428958
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9346,
+          "estimatedCostUsd": 0.0006387000000000001
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7432,
+          "estimatedCostUsd": 0.0005754
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7713,
+          "estimatedCostUsd": 0.00059115
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7873,
+          "estimatedCostUsd": 0.0006738
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8405,
+          "estimatedCostUsd": 0.00058695
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8362,
+          "estimatedCostUsd": 0.0005586
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8089,
+          "estimatedCostUsd": 0.00063165
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8617,
+          "estimatedCostUsd": 0.00056805
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8876,
+          "estimatedCostUsd": 0.0006253499999999999
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8364,
+          "estimatedCostUsd": 0.00056535
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8266,
+          "estimatedCostUsd": 0.00062055
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7431,
+          "estimatedCostUsd": 0.0005728500000000001
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8359,
+          "estimatedCostUsd": 0.00057945
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9556,
+          "estimatedCostUsd": 0.0007678499999999999
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8926,
+          "estimatedCostUsd": 0.00058815
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8026,
+          "estimatedCostUsd": 0.0005806499999999999
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7725,
+          "estimatedCostUsd": 0.00060105
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7045,
+          "estimatedCostUsd": 0.00056175
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8899,
+          "estimatedCostUsd": 0.00066855
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7973,
+          "estimatedCostUsd": 0.0005667
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7960,
+          "estimatedCostUsd": 0.00061215
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8274,
+          "estimatedCostUsd": 0.0006135
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8341,
+          "estimatedCostUsd": 0.0005861999999999999
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9639,
+          "estimatedCostUsd": 0.0007335
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8949,
+          "estimatedCostUsd": 0.00062955
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 12347,
+          "estimatedCostUsd": 0.00054315
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8555,
+          "estimatedCostUsd": 0.000639
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7470,
+          "estimatedCostUsd": 0.00055515
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 7840,
+          "estimatedCostUsd": 0.00063255
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8285,
+          "estimatedCostUsd": 0.0005704499999999999
+        }
+      ]
+    },
+    {
+      "configurationId": "v03-swarm-with-debate",
+      "repetitions": 3,
+      "automatic": {
+        "truePositives": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "falsePositives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "falseNegatives": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "precision": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "recall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "f1": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "severityWeightedRecall": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "criticalIssueDetectionRate": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "averageFindingsPerCase": {
+          "mean": 1,
+          "median": 1,
+          "min": 1,
+          "max": 1,
+          "standardDeviation": 0
+        },
+        "runtimeMs": {
+          "mean": 116430.66666666667,
+          "median": 106961,
+          "min": 104571,
+          "max": 137760,
+          "standardDeviation": 15113.644394681547
+        },
+        "estimatedCostUsd": {
+          "mean": 0.007701849999999999,
+          "median": 0.0076562999999999996,
+          "min": 0.007621649999999999,
+          "max": 0.007827599999999999,
+          "standardDeviation": 0.00009003685356563705
+        },
+        "casesWithAllExpectedFindings": {
+          "mean": 10,
+          "median": 10,
+          "min": 10,
+          "max": 10,
+          "standardDeviation": 0
+        },
+        "casesWithZeroValidFindings": {
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "standardDeviation": 0
+        },
+        "costPerCase": {
+          "mean": 0.0007701849999999999,
+          "median": 0.00076563,
+          "min": 0.0007621649999999999,
+          "max": 0.0007827599999999999,
+          "standardDeviation": 0.000009003685356563695
+        },
+        "costPerTruePositive": {
+          "mean": 0.0007701849999999999,
+          "median": 0.00076563,
+          "min": 0.0007621649999999999,
+          "max": 0.0007827599999999999,
+          "standardDeviation": 0.000009003685356563695
+        },
+        "runtimePerCase": {
+          "mean": 11643.066666666666,
+          "median": 10696.1,
+          "min": 10457.1,
+          "max": 13776,
+          "standardDeviation": 1511.3644394681544
+        }
+      },
+      "perCase": [
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11588,
+          "estimatedCostUsd": 0.00076755
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11652,
+          "estimatedCostUsd": 0.0007213499999999999
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9457,
+          "estimatedCostUsd": 0.00072915
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 12359,
+          "estimatedCostUsd": 0.0008428499999999999
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9584,
+          "estimatedCostUsd": 0.0007347
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10336,
+          "estimatedCostUsd": 0.00070425
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 12616,
+          "estimatedCostUsd": 0.0009640499999999999
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 8885,
+          "estimatedCostUsd": 0.00070665
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10071,
+          "estimatedCostUsd": 0.0007878
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 1,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10413,
+          "estimatedCostUsd": 0.00069795
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11305,
+          "estimatedCostUsd": 0.00088035
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9230,
+          "estimatedCostUsd": 0.0007362
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9381,
+          "estimatedCostUsd": 0.0006763499999999999
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11391,
+          "estimatedCostUsd": 0.0008637
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10373,
+          "estimatedCostUsd": 0.0007730999999999999
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9896,
+          "estimatedCostUsd": 0.0007143
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11664,
+          "estimatedCostUsd": 0.0008903999999999999
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 9144,
+          "estimatedCostUsd": 0.0007053
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 11638,
+          "estimatedCostUsd": 0.0008458499999999999
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 2,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 10549,
+          "estimatedCostUsd": 0.00074205
+        },
+        {
+          "caseId": "admin-invite-authorization",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 13182,
+          "estimatedCostUsd": 0.0007854
+        },
+        {
+          "caseId": "dashboard-export-ux",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 12811,
+          "estimatedCostUsd": 0.0007670999999999999
+        },
+        {
+          "caseId": "failed-payment-retry",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 14619,
+          "estimatedCostUsd": 0.0007329
+        },
+        {
+          "caseId": "invoice-audit-omission",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 13630,
+          "estimatedCostUsd": 0.00083325
+        },
+        {
+          "caseId": "notification-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 15025,
+          "estimatedCostUsd": 0.0007296
+        },
+        {
+          "caseId": "notification-opt-out",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 13016,
+          "estimatedCostUsd": 0.0007100999999999999
+        },
+        {
+          "caseId": "profile-validation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 14682,
+          "estimatedCostUsd": 0.0007744499999999999
+        },
+        {
+          "caseId": "role-change-regression",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 13136,
+          "estimatedCostUsd": 0.00076065
+        },
+        {
+          "caseId": "starter-seat-limit",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 14349,
+          "estimatedCostUsd": 0.0008315999999999999
+        },
+        {
+          "caseId": "trial-cancellation",
+          "repetition": 3,
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "runtimeMs": 13310,
+          "estimatedCostUsd": 0.0006965999999999999
+        }
+      ]
+    }
+  ],
+  "humanAdjudicated": null,
+  "rawArtifactIndex": [
+    "v03-single-agent-r1-4b4a64c6-4714-482e-8df6-333608e83caf",
+    "v03-single-agent-r1-cfc13358-c5d0-43de-bdbf-2531b3da0796",
+    "v03-single-agent-r2-0e0a730d-0844-496b-bd6e-a0abdf1beba5",
+    "v03-single-agent-r2-3518cb69-427c-413b-86a8-f35d3b64b732",
+    "v03-single-agent-r3-6c171173-fc17-4334-8eeb-75ddc8a25e03",
+    "v03-single-agent-r3-9f9d248b-7d49-4293-a5d5-d8a1b82a3bfa",
+    "v03-smoke-single-agent-r1-2df23531-7cef-4c12-82c1-af356f5830b6",
+    "v03-smoke-swarm-no-debate-r1-1b83a6b2-8690-4cf4-be36-3d615e726f8b",
+    "v03-smoke-swarm-with-debate-r1-4a6b802a-4627-49c1-bcb0-8bb9a603a665",
+    "v03-specbridge-requirements-r1-0eb1c92e-9aee-4c99-a519-e4c19ffb82ae",
+    "v03-specbridge-requirements-r2-9fd630cf-a544-4965-8758-2aef584ac209",
+    "v03-specbridge-requirements-r3-c14a929b-218e-4331-9357-b8e634d21367",
+    "v03-swarm-debate-static-r1-4405dda7-00a9-4aa1-adb9-c84331abf4fb",
+    "v03-swarm-debate-static-r2-fc527513-ac2d-4d39-ad69-330774d37d27",
+    "v03-swarm-debate-static-r3-9bf15fb2-69ab-4a9f-b719-12a9a488defc",
+    "v03-swarm-no-debate-r1-f1038798-773c-4655-ab1b-bb05d824bc1e",
+    "v03-swarm-no-debate-r2-47e1d7ee-e31f-45ae-9b1b-4e046a992556",
+    "v03-swarm-no-debate-r3-1c8b441d-9890-4ab4-8d28-f37f08680b96",
+    "v03-swarm-with-debate-r1-472c2bc5-6324-4ee0-8a4c-55894f72c00d",
+    "v03-swarm-with-debate-r2-6eab4b99-ceba-48c5-a1f0-87eaf90b487e",
+    "v03-swarm-with-debate-r3-97ebdc41-0f64-4067-87fd-777c8afbacdf"
+  ]
+}

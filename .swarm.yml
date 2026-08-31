@@ -7,6 +7,14 @@ provider:
     apiKey: $ANTHROPIC_API_KEY  # Or use a GitHub secret
     model: claude-3-5-sonnet-latest
 
+# Optional strict worst-case spend cap for all model calls in one action run.
+# Calls use fallback_model when the primary model no longer fits; calls are skipped
+# before the cap can be exceeded when neither model fits.
+# budget:
+#   max_cost_usd: 1.50
+#   fallback_model: claude-3-5-haiku-latest
+#   max_output_tokens: 4096
+
 # Alternative: OpenAI
 # provider:
 #   type: openai
@@ -135,3 +143,18 @@ diff:
   max_patch_chars_per_file: 12000
   max_total_chars: 180000
   exclude_patterns: []
+
+static_analysis:
+  enabled: false
+  commands: []
+
+context_enrichment:
+  enabled: true
+  max_depth: 1
+  file_size_limit_kb: 100
+
+requirements:
+  enabled: false
+  contract_path: .specbridge/requirements.json
+  fail_on_violation: false
+  upload_sarif: false

@@ -1,5 +1,7 @@
 node_modules/
-dist/
+dist/*
+!dist/index.js
 .DS_Store
 npm-debug.log*
 *.tsbuildinfo
+offline-specbridge-validation-output/

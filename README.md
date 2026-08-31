@@ -1,24 +1,41 @@
 # swarm-review
 
-swarm-review is a GitHub Action that turns one pull request into a multi-agent review session.
+swarm-review is a GitHub Action for **independent specialist review, evidence-aware synthesis, and optional requirement validation**.
 
-Each configured agent reads the diff independently, flags issues, and then enters a structured debate with the rest of the swarm. A principal agent reads the full transcript and posts the final PR comment, so the output looks like a real engineering review instead of a single flat model response.
+Requirement-aware review is supported via [SpecBridge integration](docs/SPECBRIDGE.md) for contract configuration, coverage artifacts, SARIF consumption, and merge-gate behavior.
+
+Each configured agent reads the diff independently and flags domain-specific issues. A principal agent synthesizes all findings into a clear, actionable engineering review. Structured debate rounds remain available as an opt-in feature for complex or high-risk pull requests.
 
 ## Why it exists
 
-Most AI review tools give you one opinion. swarm-review gives you a review process.
+Most AI review tools give you a single uncoordinated opinion. swarm-review gives you an evidence-backed review process.
 
-- Different agents can specialize in security, performance, architecture, or whatever your team needs.
-- Agents can challenge each other before the final comment is posted.
-- Teams can choose whether to show only the final outcome or the full debate transcript.
+- **Specialized Independent Review**: Different agents specialize in security, performance, architecture, or custom domains.
+- **Evidence-Aware Principal Synthesis**: A principal engineering agent synthesizes findings, eliminates false positives, and makes final calls.
+- **Optional Requirement Validation**: Validate pull requests directly against `.specbridge/requirements.json` contracts.
+- **Evaluation-Backed Efficiency**: Default non-debate mode eliminates unnecessary LLM calls, saving cost and latency.
 
 ## How it works
 
 1. The action fetches the pull request diff from GitHub.
-2. Every agent performs an independent first-pass review in parallel.
-3. The agents debate each other for the configured number of rounds.
-4. The principal agent synthesizes the transcript into a final summary.
-5. The action updates the PR comment and, optionally, the check run.
+2. If `static_analysis` is enabled, the action runs linter and compiler checks in the runner workspace and parses warnings and errors.
+3. Every agent performs an independent first-pass review in parallel.
+4. The principal agent synthesizes all findings (and optional static analysis / SpecBridge contracts) into a final review summary.
+5. If debate is explicitly enabled (`debate.enabled: true` or `debate.rounds > 0`), agents engage in structured rebuttal rounds before principal synthesis.
+6. The action updates the PR comment and, optionally, the check run.
+
+## Evaluation & Architecture Benchmarks
+
+Swarm-Review's multi-agent debate architecture has been empirically benchmarked against [SpecBench v0.2](https://github.com/EvanGribar/SpecBench) across 5 distinct review configurations (Single-Agent, Swarm without Debate, Swarm with Debate, Swarm Debate + Static Analysis, and Requirement-Aware SpecBridge).
+
+Key measured findings:
+- **Principal Synthesis Sufficiency**: Independent reviewers plus principal synthesis (`swarm-no-debate`) achieves **100.0% Recall** and **100.0% Precision** on SpecBench v0.2 requirement violation cases. Principal synthesis alone filters false positives without requiring multi-agent debate rounds.
+- **Debate Cost & Latency Penalty**: Structured debate (`swarm-with-debate`) achieves identical 100% precision and recall as non-debate swarm, while adding **+26.2% cost** ($0.0077 vs $0.0061) and **+38.1% runtime latency** (116.4s vs 84.3s).
+- **SpecBridge Requirement Efficiency**: Contract-aware SpecBridge evaluation delivers **98.4% F1** at **22% of the cost** ($0.0017 vs $0.0077) and **27% of the latency** (31.9s vs 116.4s).
+
+For detailed methodology, per-case breakdowns, budget controls, and artifact indices, see:
+- [Evaluation Methodology](docs/EVALUATION.md)
+- [Evaluation Results & Benchmarks Report](docs/EVALUATION_RESULTS.md)
 
 ## Architecture
 
@@ -41,6 +58,8 @@ name: swarm-review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: read
@@ -49,13 +68,23 @@ permissions:
 
 jobs:
   review:
+    if: >-
+      github.event_name != 'issue_comment' ||
+      (github.event.issue.pull_request &&
+      contains(github.event.comment.body, '/swarm-review') &&
+      (github.event.comment.author_association == 'OWNER' ||
+      github.event.comment.author_association == 'MEMBER' ||
+      github.event.comment.author_association == 'COLLABORATOR'))
     runs-on: ubuntu-latest
+    concurrency:
+      group: swarm-review-${{ github.event.pull_request.number || github.event.issue.number }}
+      cancel-in-progress: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Run swarm-review
-        uses: ./
+        uses: EvanGribar/Swarm-Review@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -65,35 +94,49 @@ jobs:
 
 Then add a `.swarm.yml` file at the repository root if you want to customize the swarm.
 
-## Configuration
+### Conversational Re-Review
 
-If `.swarm.yml` is missing, the action uses the default config bundled with this repository.
+When the `issue_comment` trigger is enabled, repository owners, organization members, and collaborators can reply with `/swarm-review` or `/swarm-review debate` on its own line to trigger a re-review. Commands from bots, outside contributors, and other users are ignored so public comments cannot spend the repository's model budget.
+
+During a re-review, the action:
+1. Gathers all comments posted after the latest principal's review comment.
+2. Identifies developer feedback (excluding the bot's own comments).
+3. Strips the trigger commands and feeds the text directly into the debate agent prompt.
+
+This allows agents to incorporate developer feedback and debate, defend, or concede their findings based on developer responses. The action bounds collected feedback to avoid unbounded prompt growth. If a comment does not contain an exact command, the action exits immediately without calling a model.
+
+For `issue_comment` events, keep the checkout on the trusted default branch. Checking out and executing code from an untrusted pull request in a workflow that can access secrets is unsafe. The pull request diff still comes from GitHub's API; local static-analysis and context-enrichment inputs come from the trusted checkout.
+
+## Presets & Configuration
+
+If `.swarm.yml` is missing, the action defaults to `preset: balanced` (3 independent reviewers + principal synthesis, 0 debate rounds).
+
+### Presets
+
+Swarm-Review supports simple evaluation-backed presets:
+
+| Preset | Description | Reviewers | Debate | Static Analysis | Requirement Evaluation |
+| --- | --- | --- | --- | --- | --- |
+| `fast` | Lowest cost & latency for quick PRs | 1 (`security`) | 0 rounds | Off | Off |
+| `balanced` *(default)* | Evidence-backed default architecture | 3 (`security`, `performance`, `architecture`) | 0 rounds | Off | Off |
+| `thorough` | Full suite with linter/compiler checks | 4 (+ `dx`) | 0 rounds | On | Off |
+| `requirements` | Contract-aware SpecBridge evaluation | 3 | 0 rounds | Off | On (`.specbridge/requirements.json`) |
+
+### Example `.swarm.yml`
 
 ```yaml
-agents:
-  - name: security
-    mandate: >
-      Review for security vulnerabilities. Look for injection risks, exposed secrets,
-      broken auth, insecure defaults, and unsafe data handling.
+preset: balanced
 
-  - name: performance
-    mandate: >
-      Review for performance issues. Look for N+1 queries, unnecessary re-renders,
-      expensive operations in hot paths, and missing pagination.
-
-  - name: architecture
-    mandate: >
-      Review for architectural concerns. Look for separation of concerns violations,
-      tight coupling, naming inconsistency, and patterns that do not fit the codebase.
-
-  - name: dx
-    mandate: >
-      Review for developer experience. Look for missing tests, outdated docs,
-      unclear variable names, and changes that will be hard to maintain.
-
+# Opt-in structured debate (optional)
 debate:
-  rounds: 2
+  enabled: false # Set to true or rounds: 1 to enable debate
+  rounds: 0
   min_confidence: 0.6
+
+budget:
+  max_cost_usd: 1.50
+  fallback_model: claude-3-5-haiku-latest
+  max_output_tokens: 4096
 
 principal:
   mandate: >
@@ -102,12 +145,33 @@ principal:
 
 output:
   mode: outcome
+  inline: false
+  review_event: COMMENT
 
 diff:
   max_files: 80
   max_patch_chars_per_file: 12000
   max_total_chars: 180000
+  include_patterns: []
   exclude_patterns: []
+
+static_analysis:
+  enabled: false
+  commands:
+    - name: eslint
+      run: npx eslint --format json -o eslint-report.json
+      outputFile: eslint-report.json
+      parser: eslint-json
+    - name: typescript
+      run: npx tsc --noEmit
+      parser: regex
+      regex: "(?<file>[^:]+):(?<line>\\d+):(?<column>\\d+) - (?<claim>.+)"
+
+context_enrichment:
+  enabled: true
+  max_depth: 1
+  file_size_limit_kb: 100
+  ignored_dirs: ["node_modules", ".git", "dist", "build", "out", ".next", "target", "coverage", "bin", "obj"]
 ```
 
 ### Output modes
@@ -145,19 +209,42 @@ principal: blocking until this path uses parameterized queries.
 ### Config fields
 
 - `provider`: optional LLM provider configuration (see Provider Configuration below).
-- `agents`: list of reviewer agents, each with a `name`, `mandate`, and optional `model`.
+- `agents`: list of reviewer agents, each with a `name`, `mandate`, optional `model`, and optional agent-level overrides:
+  - `agents[].system_prompt`: custom reviewer instructions appended to the built-in structured-output prompt.
+  - `agents[].min_confidence`: confidence threshold from `0` to `1`. Defaults to `debate.min_confidence`.
+  - `agents[].include_patterns`: glob patterns of files this agent should review.
+  - `agents[].exclude_patterns`: glob patterns of files this agent should ignore.
+- `budget.max_cost_usd`: optional strict per-run spend cap. Before every call, swarm-review reserves a conservative worst-case cost and never starts a call that would exceed the cap. Successful calls settle to an observed-output upper bound; failed or ambiguous calls retain their reservation because they may still be billable.
+- `budget.fallback_model`: optional cheaper model from the same provider to use when the primary model no longer fits. Models without known pricing require a known fallback when budgeting is enabled.
+- `budget.max_output_tokens`: maximum output tokens reserved and requested per call. Defaults to `4096`.
 - `debate.rounds`: how many debate rounds to run after the first-pass review.
 - `debate.min_confidence`: findings below this threshold are filtered out.
 - `principal.mandate`: instructions for the synthesis agent.
 - `output.mode`: controls whether the transcript is included in the PR comment.
+- `output.inline`: whether to publish accepted findings as inline GitHub review comments.
+- `output.review_event`: GitHub review submission event status (`COMMENT`, `APPROVE`, `REQUEST_CHANGES`, or `AUTO`).
 - `diff.max_files`: maximum number of files to include in the diff sent to agents.
 - `diff.max_patch_chars_per_file`: maximum characters per file patch before truncation.
 - `diff.max_total_chars`: maximum total characters across all files.
-- `diff.exclude_patterns`: array of regex patterns to exclude files from review (e.g., `["\\.lock$", "package-lock\\.json"]`).
+- `diff.include_patterns`: global list of glob patterns to limit review files (e.g., `["src/**"]`).
+- `diff.exclude_patterns`: global list of glob patterns to exclude files from review (e.g., `["\\.lock$", "package-lock\\.json"]`).
+- `static_analysis.enabled`: whether to run local linter and compiler commands (`true` or `false`).
+- `static_analysis.commands`: list of shell commands to run, each with:
+  - `name`: the name of the tool (used as the agent name for findings).
+  - `run`: the shell command to execute.
+  - `parser`: log parser to use (`eslint-json` or `regex`).
+  - `outputFile`: optional path to a generated report file. If provided, the linter report is read directly from this file. If omitted, the runner falls back to extracting the output file path from command line arguments (e.g. `-o <file>` or `--output-file <file>`) or stdout.
+  - `regex`: the regular expression to parse output logs line-by-line (required when `parser` is `regex`). Must define `(?<file>...)`, `(?<line>...)`, and `(?<claim>...)` named capture groups, and optionally `(?<severity>...)`.
+- `context_enrichment.enabled`: whether to resolve import dependencies and pull skeletal signature context (`true` or `false`). Defaults to `true`.
+- `context_enrichment.max_depth`: how deep to recursively trace import dependencies (e.g., `1` for direct imports, `2` for imports of imports). Defaults to `1`.
+- `context_enrichment.file_size_limit_kb`: ignore dependency files larger than this size in KB to prevent context window bloat. Defaults to `100`.
+- `context_enrichment.ignored_dirs`: optional list of directories to ignore when searching for dependency files or building codebase index (e.g., `["node_modules", ".git", "dist"]`). Defaults to standard build and node directories.
 
 ## Provider Configuration
 
 swarm-review supports multiple LLM providers through the `provider` field in `.swarm.yml`. If not specified, the action falls back to the legacy `anthropic-api-key` input.
+
+Provider `apiKey` values may reference an environment variable as `$NAME` or `${NAME}`. Set that environment variable on the action step from a GitHub secret; swarm-review resolves the reference at runtime and fails clearly if it is missing. Literal keys are supported for local testing but should never be committed.
 
 ### Anthropic (default)
 
@@ -333,13 +420,15 @@ provider:
       X-Custom-Header: value
 ```
 
+`baseURL` may be an API root such as `https://your-provider.com/v1` or the full `/chat/completions` endpoint.
+
 ### Legacy Mode
 
 If you don't configure a provider in `.swarm.yml`, the action uses the legacy inputs:
 
 ```yaml
 - name: Run swarm-review
-  uses: ./
+  uses: EvanGribar/Swarm-Review@v1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -353,15 +442,20 @@ provider:
   type: anthropic
   config:
     apiKey: $ANTHROPIC_API_KEY
-    model: claude-instruct-beta-5b
+    model: claude-3-5-sonnet-latest
 ```
 
 ## Action Inputs
 
 - `github-token`: GitHub token with permission to comment on pull requests.
-- `provider`: LLM provider configuration (see Provider Configuration above).
+- `anthropic-api-key`: legacy Anthropic API key; use `.swarm.yml` for other providers.
+- `anthropic-model`: optional legacy Anthropic model override.
+- `api-endpoint`: optional Anthropic-compatible messages endpoint for legacy configuration.
 - `config-path`: optional path to the swarm config file.
+- `pull-number`: optional pull request number when it cannot be resolved from the event payload.
 - `check-run-id`: optional existing check run ID to update after the review.
+- `inline`: optional override to post findings as inline review comments (`true` or `false`).
+- `review-event`: optional override for GitHub review event status (`COMMENT`, `APPROVE`, `REQUEST_CHANGES`, or `AUTO`).
 
 ## Action Outputs
 
@@ -371,6 +465,10 @@ provider:
 - `comment-action`: either `created` or `updated`.
 - `comment-url`: URL of the created or updated PR comment when available.
 - `check-run-updated`: `true` when a valid check run ID was provided and updated.
+- `total-input-tokens`: total input tokens consumed by LLM calls.
+- `total-output-tokens`: total output tokens consumed by LLM calls.
+- `total-cost`: estimated total cost of LLM calls in USD.
+- `total-calls`: total number of LLM calls executed.
 
 ## Example Result
 
@@ -397,7 +495,7 @@ npm test
 - Missing token or API key:
   - Ensure `github-token` and `anthropic-api-key` are passed to the action.
 - The action cannot resolve pull request number:
-  - Confirm the workflow runs on pull request events, or provide `pull-number` through environment input.
+  - Confirm the workflow runs on pull request events, or provide the `pull-number` action input.
 - LLM response parsing failures:
   - The run fails when the model output is not valid JSON matching the schema.
   - Retry with a stricter model instruction in your agent mandates or principal mandate.
@@ -417,12 +515,13 @@ Tune these values based on repository size and expected review depth.
 
 ## Release Process
 
-Releases are delivered in stage-specific pull requests so each risk domain is reviewed independently. This keeps reviews focused and makes rollback decisions straightforward. For example, a release cycle typically includes:
+Releases are delivered in focused pull requests so each risk domain can be reviewed and rolled back independently. To publish a stable release:
 
-1. Stability and safety hardening.
-2. Diff scaling and runtime reliability.
-3. Coverage expansion for key helpers.
-4. Documentation and release metadata.
+1. Merge the release metadata PR after CI passes and create the matching `vX.Y.Z` tag and GitHub release.
+2. The release workflow checks that the tag matches `package.json`, runs the full tests, and verifies the committed bundle.
+3. For stable releases, the workflow advances the floating major tag (for example, `v1`) to the verified release commit.
+
+Consumers should pin `EvanGribar/Swarm-Review@v1` for compatible v1 updates or a full tag such as `@v1.1.0` for an immutable version.
 
 
 ## Project Layout

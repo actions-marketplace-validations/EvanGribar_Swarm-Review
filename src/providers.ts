@@ -34,6 +34,108 @@ function addJitter(ms: number): number {
   return ms + jitter;
 }
 
+function appendEndpointPath(baseURL: string, suffix: string): string {
+  const url = new URL(baseURL);
+  const path = url.pathname.replace(/\/+$/, "");
+  if (!path.endsWith(suffix)) {
+    url.pathname = `${path}${suffix}`;
+  }
+  return url.toString();
+}
+
+function resolveAnthropicEndpoint(baseURL?: string): string {
+  const endpoint = baseURL || "https://api.anthropic.com/v1/messages";
+  const path = new URL(endpoint).pathname.replace(/\/+$/, "");
+  if (path.endsWith("/messages")) {
+    return new URL(endpoint).toString();
+  }
+  return appendEndpointPath(endpoint, path.endsWith("/v1") ? "/messages" : "/v1/messages");
+}
+
+function resolveChatCompletionsEndpoint(baseURL: string): string {
+  return appendEndpointPath(baseURL, "/chat/completions");
+}
+
+export type ModelUsage = {
+  inputTokens: number;
+  outputTokens: number;
+  calls: number;
+};
+
+export const tokenTracker: {
+  models: Record<string, ModelUsage>;
+  totalCalls: number;
+} = {
+  models: {},
+  totalCalls: 0,
+};
+
+export function trackTokens(model: string, input: number, output: number) {
+  if (!tokenTracker.models[model]) {
+    tokenTracker.models[model] = { inputTokens: 0, outputTokens: 0, calls: 0 };
+  }
+  tokenTracker.models[model].inputTokens += input;
+  tokenTracker.models[model].outputTokens += output;
+  tokenTracker.models[model].calls += 1;
+  tokenTracker.totalCalls += 1;
+}
+
+export function resetTokenTracker() {
+  tokenTracker.models = {};
+  tokenTracker.totalCalls = 0;
+}
+
+export const MODEL_COSTS: Record<string, { input: number; output: number }> = {
+  "claude-3-5-sonnet-latest": { input: 3.0, output: 15.0 },
+  "claude-3-5-sonnet-20241022": { input: 3.0, output: 15.0 },
+  "claude-3-5-sonnet-20240620": { input: 3.0, output: 15.0 },
+  "claude-3-opus-latest": { input: 15.0, output: 75.0 },
+  "claude-3-opus-20240229": { input: 15.0, output: 75.0 },
+  "claude-3-5-haiku-latest": { input: 0.8, output: 4.0 },
+  "claude-3-5-haiku-20241022": { input: 0.8, output: 4.0 },
+  "gpt-4o": { input: 2.5, output: 10.0 },
+  "gpt-4o-2024-08-06": { input: 2.5, output: 10.0 },
+  "gpt-4o-2024-05-13": { input: 5.0, output: 15.0 },
+  "gpt-4o-mini": { input: 0.15, output: 0.60 },
+  "gpt-4o-mini-2024-07-18": { input: 0.15, output: 0.60 },
+  "o1-preview": { input: 15.0, output: 60.0 },
+  "o1-mini": { input: 3.0, output: 12.0 },
+  "gemini-2.5-pro": { input: 1.25, output: 5.00 },
+  "gemini-2.5-flash": { input: 0.075, output: 0.30 },
+  "gemini-2.0-pro-exp": { input: 0.0, output: 0.0 },
+  "gemini-2.0-flash": { input: 0.075, output: 0.30 },
+  "gemini-1.5-pro": { input: 1.25, output: 5.00 },
+  "gemini-1.5-flash": { input: 0.075, output: 0.30 },
+};
+
+export function getModelCostRates(model: string): { input: number; output: number } | undefined {
+  const normalizedModel = model.toLowerCase();
+  const baseModel = normalizedModel.split("/").at(-1) ?? normalizedModel;
+  const matchedKey = Object.keys(MODEL_COSTS).find(
+    (key) => key.toLowerCase() === normalizedModel || key.toLowerCase() === baseModel
+  );
+
+  return matchedKey ? MODEL_COSTS[matchedKey] : undefined;
+}
+
+export function calculateEstimatedCost(): { cost: number; hasUnknown: boolean } {
+  let totalCost = 0;
+  let hasUnknown = false;
+
+  for (const [model, usage] of Object.entries(tokenTracker.models)) {
+    const rates = getModelCostRates(model);
+
+    if (rates) {
+      const modelCost = (usage.inputTokens * rates.input + usage.outputTokens * rates.output) / 1_000_000;
+      totalCost += modelCost;
+    } else {
+      hasUnknown = true;
+    }
+  }
+
+  return { cost: totalCost, hasUnknown };
+}
+
 export interface LLMProvider {
   call(system: string, prompt: string, maxTokens?: number): Promise<string>;
 }
@@ -42,7 +144,7 @@ class AnthropicProvider implements LLMProvider {
   constructor(private config: AnthropicConfig) {}
 
   async call(system: string, prompt: string, maxTokens = 4096): Promise<string> {
-    const endpoint = "https://api.anthropic.com/v1/messages";
+    const endpoint = resolveAnthropicEndpoint(this.config.baseURL);
     let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= MAX_RETRY_ATTEMPTS; attempt += 1) {
@@ -85,7 +187,12 @@ class AnthropicProvider implements LLMProvider {
 
         const payload: {
           content?: Array<{ type: string; text?: string }>;
+          usage?: { input_tokens?: number; output_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.input_tokens ?? 0, payload.usage.output_tokens ?? 0);
+        }
 
         return (payload.content ?? [])
           .filter(
@@ -118,7 +225,9 @@ class OpenAIProvider implements LLMProvider {
   constructor(private config: OpenAIConfig) {}
 
   async call(system: string, prompt: string, maxTokens = 4096): Promise<string> {
-    const endpoint = this.config.baseURL || "https://api.openai.com/v1/chat/completions";
+    const endpoint = resolveChatCompletionsEndpoint(
+      this.config.baseURL || "https://api.openai.com/v1/chat/completions"
+    );
     let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= MAX_RETRY_ATTEMPTS; attempt += 1) {
@@ -162,7 +271,12 @@ class OpenAIProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -235,7 +349,12 @@ class OpenRouterProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -262,7 +381,7 @@ class OpenClawProvider implements LLMProvider {
   constructor(private config: OpenClawConfig) {}
 
   async call(system: string, prompt: string, maxTokens = 4096): Promise<string> {
-    const endpoint = `${this.config.baseURL}/chat/completions`;
+    const endpoint = resolveChatCompletionsEndpoint(this.config.baseURL);
     let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= MAX_RETRY_ATTEMPTS; attempt += 1) {
@@ -306,7 +425,12 @@ class OpenClawProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -333,7 +457,7 @@ class HermesProvider implements LLMProvider {
   constructor(private config: HermesConfig) {}
 
   async call(system: string, prompt: string, maxTokens = 4096): Promise<string> {
-    const endpoint = `${this.config.baseURL}/chat/completions`;
+    const endpoint = resolveChatCompletionsEndpoint(this.config.baseURL);
     let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= MAX_RETRY_ATTEMPTS; attempt += 1) {
@@ -377,7 +501,12 @@ class HermesProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -448,7 +577,12 @@ class GroqProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -519,7 +653,12 @@ class TogetherProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -590,7 +729,12 @@ class MistralProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -661,7 +805,12 @@ class CohereProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -732,7 +881,12 @@ class PerplexityProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -803,7 +957,12 @@ class HyperbolicProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -830,7 +989,7 @@ class GeminiProvider implements LLMProvider {
   constructor(private config: GeminiConfig) {}
 
   async call(system: string, prompt: string, maxTokens = 4096): Promise<string> {
-    const endpoint = "https://generativelanguage.googleapis.com/v1beta/chat/completions";
+    const endpoint = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
     let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= MAX_RETRY_ATTEMPTS; attempt += 1) {
@@ -840,10 +999,11 @@ class GeminiProvider implements LLMProvider {
       let retryDelayMs = 500 * 2 ** (attempt - 1);
 
       try {
-        const response = await fetch(`${endpoint}?key=${this.config.apiKey}`, {
+        const response = await fetch(endpoint, {
           method: "POST",
           headers: {
             "content-type": "application/json",
+            "authorization": `Bearer ${this.config.apiKey}`,
           },
           body: JSON.stringify({
             model: this.config.model,
@@ -873,7 +1033,12 @@ class GeminiProvider implements LLMProvider {
 
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
         } = await response.json();
+
+        if (payload.usage) {
+          trackTokens(this.config.model, payload.usage.prompt_tokens ?? 0, payload.usage.completion_tokens ?? 0);
+        }
 
         return payload.choices?.[0]?.message?.content ?? "";
       } catch (error) {
@@ -918,7 +1083,7 @@ class CustomProvider implements LLMProvider {
           headers["authorization"] = `Bearer ${this.config.apiKey}`;
         }
 
-        const response = await fetch(this.config.baseURL, {
+        const response = await fetch(resolveChatCompletionsEndpoint(this.config.baseURL), {
           method: "POST",
           headers,
           body: JSON.stringify({
@@ -950,7 +1115,19 @@ class CustomProvider implements LLMProvider {
         const payload: {
           choices?: Array<{ message?: { content?: string } }>;
           content?: Array<{ type: string; text?: string }>;
+          usage?: {
+            prompt_tokens?: number;
+            completion_tokens?: number;
+            input_tokens?: number;
+            output_tokens?: number;
+          };
         } = await response.json();
+
+        if (payload.usage) {
+          const input = payload.usage.prompt_tokens ?? payload.usage.input_tokens ?? 0;
+          const output = payload.usage.completion_tokens ?? payload.usage.output_tokens ?? 0;
+          trackTokens(this.config.model, input, output);
+        }
 
         // Try OpenAI-style response first
         if (payload.choices?.[0]?.message?.content) {

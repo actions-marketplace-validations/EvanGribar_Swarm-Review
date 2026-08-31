@@ -58,6 +58,17 @@ test("buildDebatePrompt includes round and prior transcript", () => {
   assert.match(prompt, /review-security-1/);
 });
 
+test("buildDebatePrompt includes developer feedback if provided", () => {
+  const prompt = buildDebatePrompt(agent, diff, transcript, 2, undefined, undefined, [
+    "[alice]: Please recheck line 22",
+    "[bob]: Yes, agreed",
+  ]);
+
+  assert.match(prompt, /Developer feedback and inputs:/);
+  assert.match(prompt, /- \[alice\]: Please recheck line 22/);
+  assert.match(prompt, /- \[bob\]: Yes, agreed/);
+});
+
 test("buildPrincipalPrompt includes transcript and principal contract instruction", () => {
   const prompt = buildPrincipalPrompt(principal, transcript);
 

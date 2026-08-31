@@ -1,6 +1,8 @@
 import { buildReviewPrompt } from "../prompts.js";
-import type { AgentConfig, FileDiff, Finding, ProviderConfig, DiffConfig } from "../types.js";
-import { runAgentFindingRound } from "./shared.js";
+import { filterDiffForAgent } from "../diff.js";
+import type { AgentConfig, FileDiff, Finding, ProviderConfig, DiffConfig, ContextEnrichmentConfig } from "../types.js";
+import { buildAgentSystemPrompt, runAgentFindingRound, resolveAgentProviderConfig } from "./shared.js";
+import { gatherContextForDiff, type IndexedSymbol } from "../context.js";
 
 export type ReviewRoundInput = {
   agents: AgentConfig[];
@@ -8,92 +10,41 @@ export type ReviewRoundInput = {
   providerConfig: ProviderConfig;
   minConfidence: number;
   diffConfig?: DiffConfig;
+  contextEnrichment?: ContextEnrichmentConfig;
+  workspaceRoot?: string;
+  codebaseIndex?: Map<string, IndexedSymbol>;
 };
 
 export async function runReviewRound(input: ReviewRoundInput): Promise<Finding[]> {
   const system =
     "You are an independent reviewer in the first round of a pull request review swarm. Return only JSON and focus on real, reviewable issues.";
 
+  const contextEnrichment = input.contextEnrichment ?? { enabled: false, max_depth: 1, file_size_limit_kb: 100 };
+  const workspaceRoot = input.workspaceRoot ?? process.cwd();
+
   const findings = await Promise.all(
-    input.agents.map((agent) => {
-      // Use agent-specific model override if provided
-      let providerConfig = input.providerConfig;
-      if (agent.model) {
-        if (input.providerConfig.type === "anthropic") {
-          providerConfig = {
-            type: "anthropic",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "openai") {
-          providerConfig = {
-            type: "openai",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "openrouter") {
-          providerConfig = {
-            type: "openrouter",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "openclaw") {
-          providerConfig = {
-            type: "openclaw",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "hermes") {
-          providerConfig = {
-            type: "hermes",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "groq") {
-          providerConfig = {
-            type: "groq",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "together") {
-          providerConfig = {
-            type: "together",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "mistral") {
-          providerConfig = {
-            type: "mistral",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "cohere") {
-          providerConfig = {
-            type: "cohere",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "perplexity") {
-          providerConfig = {
-            type: "perplexity",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "hyperbolic") {
-          providerConfig = {
-            type: "hyperbolic",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "gemini") {
-          providerConfig = {
-            type: "gemini",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        } else if (input.providerConfig.type === "custom") {
-          providerConfig = {
-            type: "custom",
-            config: { ...input.providerConfig.config, model: agent.model },
-          };
-        }
+    input.agents.map(async (agent) => {
+      const providerConfig = resolveAgentProviderConfig(agent, input.providerConfig);
+      const filteredDiff = filterDiffForAgent(input.diff, agent);
+      if (filteredDiff.length === 0) {
+        console.log(`Skipping agent "${agent.name}" in review round: no matching files in diff.`);
+        return [];
       }
+
+      const codeContext = await gatherContextForDiff(
+        filteredDiff,
+        workspaceRoot,
+        contextEnrichment,
+        input.codebaseIndex
+      );
 
       return runAgentFindingRound({
         providerConfig,
-        system,
-        prompt: buildReviewPrompt(agent, input.diff, input.diffConfig),
+        system: buildAgentSystemPrompt(system, agent.system_prompt),
+        prompt: buildReviewPrompt(agent, filteredDiff, input.diffConfig, codeContext),
         agentName: agent.name,
         idPrefix: `review-${agent.name}`,
-        minConfidence: input.minConfidence,
+        minConfidence: agent.min_confidence ?? input.minConfidence,
       });
     })
   );

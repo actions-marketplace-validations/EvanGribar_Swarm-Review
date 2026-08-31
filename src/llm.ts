@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { FindingSchema, RawFindingSchema, type Finding, type RawFinding, type ProviderConfig } from "./types.js";
 import { createProvider, type LLMProvider } from "./providers.js";
+import { reserveBudgetedCall, settleSuccessfulBudgetedCall } from "./budget.js";
 
 const ANTHROPIC_MESSAGES_ENDPOINT = "https://api.anthropic.com/v1/messages";
 
@@ -54,8 +55,11 @@ export async function callLLM(
   prompt: string,
   maxTokens = 4096
 ): Promise<string> {
-  const provider = createProvider(providerConfig);
-  return provider.call(system, prompt, maxTokens);
+  const reservation = reserveBudgetedCall(providerConfig, system, prompt, maxTokens);
+  const provider = createProvider(reservation.providerConfig);
+  const responseText = await provider.call(system, prompt, reservation.maxTokens);
+  settleSuccessfulBudgetedCall(reservation, responseText);
+  return responseText;
 }
 
 export async function callLLMStructured<T>(
@@ -64,10 +68,49 @@ export async function callLLMStructured<T>(
   prompt: string,
   schema: z.ZodType<T>
 ): Promise<T> {
-  const rawText = await callLLM(providerConfig, system, prompt);
-  const jsonText = extractJsonText(rawText);
-  const parsed = JSON.parse(jsonText) as unknown;
-  return schema.parse(parsed);
+  let currentPrompt = prompt;
+  let lastResponseText = "";
+
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    // Provider/network errors are not schema errors and must not trigger another paid call.
+    const rawText = await callLLM(providerConfig, system, currentPrompt);
+    lastResponseText = rawText;
+
+    try {
+      const jsonText = extractJsonText(rawText);
+      const parsed = JSON.parse(jsonText) as unknown;
+      return schema.parse(parsed);
+    } catch (error) {
+      const errorMessage =
+        error instanceof z.ZodError
+          ? error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join("; ")
+          : error instanceof Error
+            ? error.message
+            : String(error);
+
+      if (attempt === 3) {
+        console.error(`::error::LLM structured output failed after 3 attempts. Last error: ${errorMessage}`);
+        throw error;
+      }
+
+      console.warn(
+        `::warning::LLM structured output attempt ${attempt} failed: ${errorMessage}. Retrying with feedback...`
+      );
+
+      currentPrompt = [
+        prompt,
+        "---",
+        "CRITICAL: Your previous response failed validation and could not be parsed.",
+        "Your previous response was:",
+        lastResponseText || "[EMPTY RESPONSE]",
+        "Error details:",
+        errorMessage,
+        "Please correct your output and respond ONLY with a valid JSON block that perfectly matches the requested schema. Do not include markdown fences, preamble, or other commentary.",
+      ].join("\n\n");
+    }
+  }
+
+  throw new Error("LLM structured output failed unexpectedly.");
 }
 
 // Legacy functions for backward compatibility
@@ -80,7 +123,7 @@ export async function callAnthropic(
   apiEndpoint = DEFAULT_API_ENDPOINT
 ): Promise<string> {
   return callLLM(
-    { type: "anthropic", config: { apiKey, model } },
+    { type: "anthropic", config: { apiKey, model, baseURL: apiEndpoint } },
     system,
     prompt,
     maxTokens
@@ -96,7 +139,7 @@ export async function callAnthropicStructured<T>(
   apiEndpoint = DEFAULT_API_ENDPOINT
 ): Promise<T> {
   return callLLMStructured(
-    { type: "anthropic", config: { apiKey, model } },
+    { type: "anthropic", config: { apiKey, model, baseURL: apiEndpoint } },
     system,
     prompt,
     schema

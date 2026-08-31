@@ -1,0 +1,40 @@
+name: specbridge-offline-validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/specbridge-v1-1]
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/specbridge-offline-validation.yml'
+      - 'src/agents/requirements.ts'
+      - 'src/requirements.ts'
+      - 'src/format.ts'
+      - 'src/tests/specbridge-offline-validation*'
+      - 'package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run validation:specbridge
+      - run: |
+          node -e "const fs=require('node:fs'); const c=JSON.parse(fs.readFileSync('offline-specbridge-validation-output/swarm-review-output/coverage.json')); const s=JSON.parse(fs.readFileSync('offline-specbridge-validation-output/swarm-review-output/findings.sarif')); if (c.requirements[0].criteria.map(x=>x.status).join(',') !== 'satisfied,violated,not_verifiable' || s.runs[0].results.length !== 1) process.exit(1)"
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        with:
+          name: specbridge-offline-validation
+          path: |
+            offline-specbridge-validation-output/swarm-review-output/coverage.json
+            offline-specbridge-validation-output/swarm-review-output/findings.sarif
+            offline-specbridge-validation-output/coverage-table.md

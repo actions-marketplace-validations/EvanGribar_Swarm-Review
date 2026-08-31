@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1",
+  "id": "v03-swarm-debate-static",
+  "version": "0.3.0",
+  "reviewerType": "swarm-debate-static",
+  "reviewerVersion": "controlled-swarm-v0.3-static",
+  "provider": "openai",
+  "model": "gpt-5-mini",
+  "temperature": 0,
+  "maxOutputTokens": 1500,
+  "maxCalls": 150,
+  "maxEstimatedCostUsd": 10,
+  "agentCount": 3,
+  "agentMandates": [
+    "Inspect authorization and state requirements.",
+    "Inspect user-visible requirement violations.",
+    "Principal resolves disagreements using static findings and the shared schema."
+  ],
+  "debateRounds": 1,
+  "confidenceThreshold": 0.5,
+  "principal": { "role": "consolidator", "canReject": true },
+  "promptVersion": "requirement-review-v0.3",
+  "benchmarkVersion": "v0.2",
+  "caseIds": [
+    "admin-invite-authorization",
+    "dashboard-export-ux",
+    "failed-payment-retry",
+    "invoice-audit-omission",
+    "notification-cancellation",
+    "notification-opt-out",
+    "profile-validation",
+    "role-change-regression",
+    "starter-seat-limit",
+    "trial-cancellation"
+  ],
+  "repetitions": 3,
+  "environmentMetadataFields": ["node", "platform", "model", "gitCommit"],
+  "notes": "Same multi-agent debate pipeline with static-analysis findings injected into candidate pool before debate."
+}
